@@ -52,3 +52,31 @@ ffmpeg version 4.1 Copyright (c) 2000-2018 the FFmpeg developers
 或者
 
 `ffplay -video_size 2880x1800 -pixel_format  uyvy422  screen.yuv`
+
+
+### 3.提取合并音视频
+
+提取视频： `ffmpeg -i killer.mp4 -an -vcodec copy out.h264`
+
+			`ffmpeg -i test.mp4 -pix_fmt yuv420p v.yuv`
+			
+		  `ffmpeg -i 2018.mp4 -codec copy -bsf: h264_mp4toannexb -f h264 tmp.264`
+```
+-i 2018.mp4：  是输入的MP4文件
+
+-codec copy： 从mp4中拷贝
+
+-bsf: h264_mp4toannexb： 从mp4拷贝到annexB封装
+
+-f h264： 采用h264格式
+
+tmp.264： 输出的文件
+
+```
+
+提取音频：`ffmpeg -i killer.mp4 -acodec copy -vn -y out.flv`
+
+
+播放：`ffmpeg -i test.mp4 -pix_fmt yuv420p v.yuv`
+
+合并：`ffmpeg -i v.mp4 -i a.aac -acodec copy -vcodec copy mix.mp4`
