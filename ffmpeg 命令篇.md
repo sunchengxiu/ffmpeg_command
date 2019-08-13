@@ -1,9 +1,9 @@
-# ffmpeg_command
+	# ffmpeg 命令，录屏，播放，提取视频 yuv，提取音频 pcm,滤镜命令,裁剪与合并命令,图片和视频互转命令
 ffmpeg 命令总结
 
 ### 1.录屏
 
-#### 1.1 在 macOS 下查看设备
+##### 1.1 在 macOS 下查看设备
 
 ` ffmpeg -f avfoundation -list_devices true -i ""`
 
@@ -41,7 +41,7 @@ ffmpeg version 4.1 Copyright (c) 2000-2018 the FFmpeg developers
 
 ``` 
 
-#### 1.2 录屏命令
+##### 1.2 录屏命令
 
 `ffmpeg -f avfoundation -i 1 -r 30 screen.yuv`
 
@@ -53,6 +53,7 @@ ffmpeg version 4.1 Copyright (c) 2000-2018 the FFmpeg developers
 
 `ffplay -video_size 2880x1800 -pixel_format  uyvy422  screen.yuv`
 
+<<<<<<< HEAD
 
 ### 3.提取合并音视频
 
@@ -80,3 +81,105 @@ tmp.264： 输出的文件
 播放：`ffmpeg -i test.mp4 -pix_fmt yuv420p v.yuv`
 
 合并：`ffmpeg -i v.mp4 -i a.aac -acodec copy -vcodec copy mix.mp4`
+=======
+### 3.ffmpeg 提取 yuv 数据
+
+`ffmpeg -i out.mp4 -an -c:v rawvideo -pix_fmt yuv420p out.yuv`
+
+-an:不要音频
+
+-c:v:对视频进行编码，使用 rawvideo 原始视频进行编码
+
+-pix_fmt:像素格式，yuv420p
+
+
+播放 yuv 视频 ： ffplay -video_size 3360x2100  out.yuv
+
+
+### 4.ffmpeg 提取 pcm 数据
+
+##### 4.1 提取 pcm 数据
+
+
+`ffmpeg -i 1.mp4 -vn -ar 44100 -ac 2 -f s16le out.pcm`
+
+```
+	-ar：音频的采样率 44100
+	
+	-ac2:双声道
+	
+	-f ： 音频的数据存储格式 
+	
+	s16le : s 代表 有符号的，有正有负，16 代表每一个数值用16位表示 
+	
+```
+
+
+##### 4.2 播放 pcm 数据
+
+`ffplay -ac 2 -ar 44100 -f s16le out.pcm`
+	
+### 5 滤镜命令
+
+`ffmpeg -i 1.mp4 -vf crop=in_w-200:in_h-200 -c:v libx264 -c:a copy out1.mp4`
+
+
+```
+-vf： 视频滤镜 
+crop=in_w-200:in_h-200 :
+in_w:本身视频的宽度-200
+in_h:本身视频的高度-200
+
+-c:v:视频的编码
+
+```
+
+### 6 裁剪和合并命令
+
+##### 6.1 裁剪
+
+
+` ffmpeg -i 1.mp4 -ss 00:00:02 -t 3 out.ts`
+
+```
+-ss : 视频的其实时间
+
+-t : 时长
+```
+
+##### 6.2 合并
+
+` ffmpeg -f concat -i input.txt put.mp4`
+
+```
+-f concat : 告诉 ffmpeg 将后面的文件合并到一起
+
+input.txt : 要合并的列表
+file '1.ts'
+file '2.ts'
+```
+
+### 7 图片与视频互转命令
+
+##### 7.1 视频转图片
+
+`ffmpeg -i 1.mp4 -r 1 -f image2 image-%3d.jpeg`
+
+
+```
+-r 1 :帧率，每秒钟转出一张图片
+
+-f : 将输入文件 转成 image2
+```
+
+
+##### 7.2 图片转视频
+
+` ffmpeg -f image2 -i image-%3d.jpeg  -vcodec libx264 image.mp4`
+
+
+	
+	
+	
+	
+>>>>>>> 0f3516e2ea1e8dbd528b8bfb7075df8d8dd45005
